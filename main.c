@@ -27,6 +27,8 @@ int main(int argc,char **argv){
 			continue;
 		}
 
+		
+
 		stopMainLoop = renderCheckStop(); // does the render want to stop
 		
 	}

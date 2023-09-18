@@ -7,18 +7,25 @@
 
 #include "screen.h" // all common functions for screen buffer handling
 
-const char *ASCII_PATH[]={"1.png","2.png","3.png","4.png","5.png","6.png","7.png"};
 
 // core SDL stuff
 SDL_Window *window = NULL;
 SDL_Surface  *surf = NULL;
 SDL_Renderer *rend = NULL;
 screenBuffer *screen = NULL;
-SDL_Surface **ASCII_SURF;
+SDL_Texture *textures = NULL;
+
+
 
 // char hight/width
-#define TEXT_HIGHT 30
-#define TEXT_WIDTH 30
+#define TEXT_HIGHT 10
+#define TEXT_WIDTH 10
+
+// text on the screen
+#define SCREEN_TEXT_HIGHT 20
+#define SCREEN_TEXT_WIDTH 20
+// texture path
+#define TEXT_PATH "textures/glyphs.png"
 
 //render int setup the render
 screenBuffer *renderInit(){
@@ -31,27 +38,37 @@ screenBuffer *renderInit(){
 	SDL_DisplayMode display;
 	SDL_GetCurrentDisplayMode(0, &display);
 	// make a window
-	SDL_CreateWindowAndRenderer(display.w,display.h,SDL_WINDOW_FULLSCREEN,&window,&rend);
+	window = SDL_CreateWindow("gameTest",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,display.w,display.h,SDL_WINDOW_FULLSCREEN|SDL_WINDOW_SHOWN);
 	if(window == NULL){
 		fprintf(stderr,"ERROR: SDL failed to make a window.\n %s",SDL_GetError());
 		return screen;
 	}
 
 	rend = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
-	
-	// open font file
-	//makes the main textures from the font
-	ASCII_SURF = malloc(sizeof(SDL_Surface *)*7);
-	for(unsigned int x = 0;x<7;x+=1){
-		ASCII_SURF[x] = IMG_Load(ASCII_PATH[x]);
+	if(rend == NULL){
+		fprintf(stderr,"ERROR: SDL failed to make a render.\n %s",SDL_GetError());
+		return screen;
 	}
+
+	// temp var for surface
+	SDL_Surface *charSurf = IMG_Load(TEXT_PATH);
+	if(charSurf==NULL){
+		fprintf(stderr,"ERROR: SDL_img failed to load texture: %s.\n %s",TEXT_PATH,IMG_GetError());
+	}
+	
+	textures = SDL_CreateTextureFromSurface(rend,charSurf);
+	
+	if(textures == NULL){
+		fprintf(stderr,"ERROR SDL failed to convert image surfrace into a texture.\n %s",SDL_GetError());
+	}
+	SDL_FreeSurface(charSurf);
 	//render color
 	SDL_SetRenderDrawColor(rend,0,0,0,SDL_ALPHA_OPAQUE);
-	
+
 	// sdl is up now make the screen buffer
 	int w,h;
 	SDL_GetWindowSize(window,&w,&h);
-	screen = genScreenBuffer(w/TEXT_WIDTH,h/TEXT_HIGHT);
+	screen = genScreenBuffer(w/SCREEN_TEXT_WIDTH,h/SCREEN_TEXT_HIGHT);
 	// now that we got a buffer return it
 	return screen; 
 }
@@ -62,25 +79,18 @@ void renderFrame(){
 	// does stuff with the screen
 	SDL_RenderClear(rend);
 
-	//SDL_RenderFillRect(rend,NULL);
-	SDL_Rect textPos = {0,0,0,0};
-
 	for(unsigned int y=0;y<screen->y;y+=1){
 		for(unsigned int x=0;x<screen->x;x+=1){
 			// texture offset
 			if(screen->buffer[y][x].bright>0){
-				SDL_Texture *text = SDL_CreateTextureFromSurface(rend,ASCII_SURF[(screen->buffer[y][x].bright-1)]); // gets the texture
-				SDL_SetTextureColorMod(text,(screen->buffer[y][x].red/7)*255,(screen->buffer[y][x].green/7)*255,(screen->buffer[y][x].blue/7)*255); // change the color
+				SDL_SetTextureColorMod(textures,(screen->buffer[y][x].red/7)*255,(screen->buffer[y][x].green/7)*255,(screen->buffer[y][x].blue/7)*255); // change the color
 				// sets the text pos
-				textPos.x = TEXT_WIDTH*x;
-				textPos.y = TEXT_HIGHT*y;
-				textPos.w = TEXT_WIDTH;
-				textPos.h = TEXT_HIGHT;
+				SDL_Rect screenPos = {SCREEN_TEXT_WIDTH*x,SCREEN_TEXT_HIGHT*y,SCREEN_TEXT_WIDTH,SCREEN_TEXT_HIGHT}; // position of the texture on the screen
 				
-				SDL_RenderCopy(rend,text,NULL,&textPos);
-				SDL_DestroyTexture(text); // remove the old texture
+				SDL_Rect textPos = {TEXT_WIDTH*(screen->buffer[y][x].bright-1),0,TEXT_WIDTH,TEXT_HIGHT}; // position of the texture in the texture file	
+				
+				SDL_RenderCopy(rend,textures,&textPos,&screenPos);
 			}
-			// colors later
 		}
 	}
 	SDL_RenderPresent(rend);// update screen
@@ -97,10 +107,8 @@ bool renderCheckStop(){
 
 // shutdown the render
 void renderStop(){
-	for(unsigned int i=0;i<7;i+=1){
-		SDL_FreeSurface(ASCII_SURF[i]);// frees the surfaces
-	}
-	free(ASCII_SURF);
+	SDL_DestroyTexture(textures);
+	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
