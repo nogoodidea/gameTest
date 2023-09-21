@@ -1,14 +1,12 @@
 #include<stdbool.h>
 
-// math time :(
-typedef struct vector_S {
-	double X;
-	double Y;
-	double Z;
-} vector;
+#include "screen.h"
+#include "objects.h"
 
 
-//going to need a linked list for every object and a linked list for every object rendered in a given area
+
+
+//going to need a list for every object and a linked list for every object rendered in a given area
 
 bool compareVecX(vector vec0,vector vec1){
 	if(vec0.X <= vec1.X){return false;}
@@ -23,4 +21,24 @@ bool compareVecY(vector vec0,vector vec1){
 bool compareVecZ(vector vec0,vector vec1){
 	if(vec0.Z <= vec1.Z){return false;}
 	else{return true;}
+}
+
+bool checkIntersect(vector ray,object obj){
+	// for every index of the array
+	for(unsigned int i=0;i<=obj.count;i+=1){
+		compareVecX(ray,obj.point[i]); // vector 1
+		compareVecY(ray,obj.point[i]);
+		compareVecZ(ray,obj.point[i]);
+	}
+	return false;
+}
+
+// does the raytraceing
+bool raytrace(screenBuffer *screen){
+	for(unsigned int y=0;y<screen->y;y+=1){
+		for(unsigned int x=0;x<screen->x;x+=1){
+			screenZeroPixel(&(screen->buffer[y][x]));	
+		}
+	}
+	return true;
 }

@@ -20,6 +20,8 @@ typedef struct screenBuffer_S{
 	pixelColor **buffer;//
 } screenBuffer;
 
+void screenZeroPixel(pixelColor *pixel);
+void screenOnePixel(pixelColor *pixel);
 
 // makes a new screen buffer
 screenBuffer *genScreenBuffer(unsigned int width,unsigned int hight);

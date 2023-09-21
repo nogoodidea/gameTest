@@ -59,7 +59,7 @@ screenBuffer *genScreenBuffer(unsigned int width,unsigned int hight){
 	for(unsigned int y=0;y<screen->y;y+=1){
 		screen->buffer[y] = malloc(sizeof(pixelColor)*screen->x);
 		for(unsigned int x=0;x<screen->x;x+=1){
-			screenZeroPixel(&(screen->buffer[y][x]));	
+			screenZeroPixel(&(screen->buffer[y][x]));
 		}
 		if(checkMalloc(screen->buffer[y])){return NULL;}
 	}

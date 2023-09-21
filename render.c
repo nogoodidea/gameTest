@@ -83,13 +83,12 @@ void renderFrame(){
 		for(unsigned int x=0;x<screen->x;x+=1){
 			// texture offset
 			if(screen->buffer[y][x].bright>0){
-				SDL_SetTextureColorMod(textures,(screen->buffer[y][x].red/7)*255,(screen->buffer[y][x].green/7)*255,(screen->buffer[y][x].blue/7)*255); // change the color
+				SDL_SetTextureColorMod(textures,(screen->buffer[y][x].red%7)*36.42,(screen->buffer[y][x].green%7)*36.42,(screen->buffer[y][x].blue%7)*26.42); // change the color
 				// sets the text pos
 				SDL_Rect screenPos = {SCREEN_TEXT_WIDTH*x,SCREEN_TEXT_HIGHT*y,SCREEN_TEXT_WIDTH,SCREEN_TEXT_HIGHT}; // position of the texture on the screen
-				
 				SDL_Rect textPos = {TEXT_WIDTH*(screen->buffer[y][x].bright-1),0,TEXT_WIDTH,TEXT_HIGHT}; // position of the texture in the texture file	
 				
-				SDL_RenderCopy(rend,textures,&textPos,&screenPos);
+				SDL_RenderCopy(rend,textures,&textPos,&screenPos);// copy to render buffer
 			}
 		}
 	}

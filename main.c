@@ -18,6 +18,7 @@ int main(int argc,char **argv){
 
 	playerInput input;
 	while(!stopMainLoop){
+		raytrace(screen);
 		renderFrame();// render the next frame	
 		
 		// handle the userinput
