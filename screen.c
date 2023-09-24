@@ -15,7 +15,7 @@ typedef struct {
 typedef struct {
 	unsigned int x;
 	unsigned int y;
-	pixelColor **buffer;//
+	pixelColor **buffer;// video buffer 
 } screenBuffer;
 
 // checks if malloc returned null
