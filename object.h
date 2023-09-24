@@ -1,3 +1,6 @@
+#ifndef OBJECT_H
+#define OBJECT_H
+
 // math time :(
 typedef struct vector_s {
 	double X;
@@ -11,6 +14,7 @@ typedef struct {
 	unsigned int G;
 	unsigned int B;
 } color;
+
 // square objects
 typedef struct subObject_s{
 	vector vec[3]; // triangle
@@ -22,14 +26,6 @@ typedef struct object_s {
 	subObject **obj;
 	unsigned int count;
 } object;
-
-
-typedef struct {
-	object **obj;
-	unsigned int count;
-}objectArray;
-
-
 
 // vector math
 void vectorSet(vector *vec,double X,double Y,double Z);
@@ -52,19 +48,20 @@ void vectorRotate(vector *vec,vector line,vector point,double theta);
 
 double vectorDotProduct(vector vec0,vector vec1);
 
-// object 
+// obj functions
 void objectRotate(object obj,vector line,vector point,double theta);
 
 void objectScaler(object obj,double scaler);
 
+//object int/add/free
 subObject *initSubObject();
 
 object *initObject(unsigned int amt);
 
 void addSubObject(object *obj,subObject *objAdd);
 
-void addObject(objectArray *obj,object *objAdd);
-
 void freeSubObject(subObject **obj);
 
 void freeObject(object **obj);
+
+#endif //OBJECT_H

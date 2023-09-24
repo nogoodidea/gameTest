@@ -6,6 +6,7 @@
 
 
 #include "raytracer.h"
+#include "object.h"
 
 // input types
 enum inputType {QUIT,MOVE,NONE};

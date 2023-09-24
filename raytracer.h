@@ -3,6 +3,7 @@
 
 #include "screen.h"
 #include "object.h"
+#include "world.h"
 
 typedef struct {
 	vector pos;
@@ -14,7 +15,7 @@ bool raytracerInit();
 
 
 //// does the raytraser stuff
-bool raytrace(screenBuffer *screen);
+bool raytrace(screenBuffer *screen,objectArray world);
 
 
 #endif //RAYTRACER_GAME_TEST_H

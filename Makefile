@@ -1,7 +1,7 @@
 CC := gcc
 CC_FLAGS := -Wall -fsanitize=address -g
 LD_FLAGS := -lm -lSDL2 -lSDL2_image
-GAMETESTFILES := render.c main.c screen.c controls.c object.c raytracer.c 
+GAMETESTFILES := render.c main.c screen.c controls.c object.c raytracer.c world.c
 all:
 	$(CC) $(GAMETESTFILES) $(CC_FLAGS) $(LD_FLAGS) -o gameTest
 

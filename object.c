@@ -2,8 +2,6 @@
 #include<math.h>
 #include<stdbool.h>
 
-#define MAXPRESISION 0.00000001
-
 typedef struct vector_s {
 	double X;
 	double Y;
@@ -19,7 +17,7 @@ typedef struct {
 
 // square objects
 typedef struct subObject_s{
-	vector *vec[3]; // triangle
+	vector vec[3]; // triangle
 	color colors;
 } subObject;
 
@@ -28,11 +26,6 @@ typedef struct object_s {
 	subObject **obj;
 	unsigned int count;
 } object;
-
-typedef struct {
-	object **obj;
-	unsigned int count;
-}objectArray;
 
 // vector helper functions
 
@@ -122,7 +115,7 @@ double vectorDotProduct(vector vec0,vector vec1){
 void objectRotate(object obj,vector line,vector point,double theta){
 	for(unsigned int i=0;i<obj.count;i+=1){
 		for(unsigned int v=0;v<2;v+=1){
-			vectorRotate(obj.obj[i]->vec[v],line,point,theta);
+			vectorRotate(&(obj.obj[i]->vec[v]),line,point,theta);
 		}
 	}
 }
@@ -130,23 +123,22 @@ void objectRotate(object obj,vector line,vector point,double theta){
 void objectScaler(object obj,double scaler){
 	for(unsigned int i=0;i<obj.count;i+=1){
 		for(unsigned int v=0;v<2;v+=1){
-			vectorScaler(obj.obj[i]->vec[v],*obj.obj[i]->vec[v],scaler);
+			vectorScaler(&(obj.obj[i]->vec[v]),obj.obj[i]->vec[v],scaler);
 		}
 	}
 }
 
-
 //object int/add/free
 subObject *initSubObject(){
+	subObject *subObj = malloc(sizeof(subObject));
 	vector zero;
 	vectorSet(&zero,0.0f,0.0f,0.0f);
-	subObject *object = malloc(sizeof(subObject));
 	// allways has 3 vectors
 	for(int i=0;i<3;i+=1){
-		vectorCopy(object->vec[i],zero);
+		vectorCopy(&subObj->vec[i],zero);
 		//TODO error check for malloc calls
 	}
-	return object;
+	return subObj;
 }
 
 object *initObject(unsigned int amt){
@@ -154,6 +146,9 @@ object *initObject(unsigned int amt){
 	//TODO same here
 	obj->count = amt;
 	obj->obj = malloc(sizeof(subObject*)*amt);
+	for(unsigned int i=0;i<amt;i+=1){
+		obj->obj[i]=initSubObject();
+	}
 	return obj;
 }
 
@@ -164,25 +159,14 @@ void addSubObject(object *obj,subObject *objAdd){
 	obj->obj[obj->count-1] = objAdd;	
 }
 
-void addObject(objectArray *obj,object *objAdd){
-	obj->count +=1;
-	obj->obj = realloc(obj->obj,sizeof(subObject*)*obj->count);
-	// unchecked realloc
-	obj->obj[obj->count-1] = objAdd;	
-}
-
 void freeSubObject(subObject **obj){
-	for(unsigned int i=0;i<3;i+=1){
-		free((*obj)->vec[i]);
-	}
-	free((*obj));
-	*obj = NULL;
+	free(*obj);
+	obj = NULL;
 }
 
 void freeObject(object **obj){
 	for(unsigned int i=0;i<(*obj)->count;i+=1){
 		freeSubObject(&((*obj)->obj[i]));
-		(*obj)->obj[i]=NULL;
 	}
 	free(*obj);
 	*obj = NULL;

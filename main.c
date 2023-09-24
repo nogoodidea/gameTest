@@ -3,6 +3,7 @@
 #include "screen.h"
 #include "controls.h"
 #include "raytracer.h"
+#include "world.h"
 
 #include<stdio.h>
 #include<stdbool.h>
@@ -11,15 +12,18 @@
 //main kickoff function does stuff
 int main(int argc,char **argv){	
 	screenBuffer *screen = renderInit();
-	if(screen == NULL){fprintf(stderr,"ERROR: screen alloc failed");exit(1);}
-	if(controlsInit()==false){fprintf(stderr,"ERROR: controls start failled");exit(1);}
+	if(screen == NULL){fprintf(stderr,"ERROR: render init failed\n");exit(1);}
+	if(controlsInit()==false){fprintf(stderr,"ERROR: controls init failed\n");exit(1);}
+	if(raytracerInit()==false){fprintf(stderr,"ERROR: raytracer init falled\n");exit(1);}
+	objectArray *world = worldInit();
+	if(world == NULL){fprintf(stderr,"ERROR: world init failed\n");exit(1);}
 
 	bool stopMainLoop = false;  //shutdown var, i don't know how we need to shutdown the program so we need a few checks from multable sections	
-	if(raytracerInit()==false){fprintf(stderr,"ERROR: raytracer init falled");exit(1);}
+	
 
 	playerInput input;
 	while(!stopMainLoop){
-		raytrace(screen);
+		raytrace(screen,*world);
 		renderFrame();// render the next frame	
 		
 		// handle the userinput
@@ -34,6 +38,7 @@ int main(int argc,char **argv){
 		
 	}
 	// cleanup functions
+	freeWorld(&world);
 	freeScreenBuffer(&screen);	
 	renderStop();
 }

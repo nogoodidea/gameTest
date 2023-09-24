@@ -3,6 +3,7 @@
 
 #include "screen.h"
 #include "object.h"
+#include "world.h"
 
 #define CUTOFF .0000001 
 #define PI 3.1415926
@@ -14,7 +15,6 @@ typedef struct {
 } camera;
 
 camera cam;
-
 
 bool raytracerInit(){
 	// inital camera position and vecters
