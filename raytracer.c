@@ -15,15 +15,21 @@
 typedef struct {
 	vector pos;
 	vector dir;
+	vector up;
 } camera;
 
+camera cam;
 
-
+bool raytracerInit(){
+	// inital camera position and vecters
+	vectorSet(&(cam.pos),0.0f,0.0f,0.0f);
+	vectorSet(&(cam.dir),1.0f,0.0f,0.0f);
+	vectorSet(&(cam.up),0.0f,1.0f,0.0f);
+	return true;
+}
 
 //going to need a list for every object and a linked list for every object rendered in a given area
 object **objectArry=NULL;
-
-
 
 
 double checkIntersect(vector rayOrigin,vector rayVector,subObject tri){
@@ -75,7 +81,7 @@ double checkIntersect(vector rayOrigin,vector rayVector,subObject tri){
 	return t;
 }
 
-void raytrace(pixelColor *pixel,vector camera,vector angle){
+void raytraceFrame(pixelColor *pixel,vector camera,vector angle){
 	if(objectArry==NULL){
 		return;
 	}
@@ -92,7 +98,7 @@ void raytrace(pixelColor *pixel,vector camera,vector angle){
 		}
 	}
 	if(colors != NULL){
-		pixel->bight = t;
+		pixel->bright = t;
 		pixel->red = colors->R;
 		pixel->green= colors->G;
 		pixel->blue = colors->B;
@@ -100,25 +106,39 @@ void raytrace(pixelColor *pixel,vector camera,vector angle){
 }
 
 // does the raytraceing
-bool render(screenBuffer *screen,subObject camera){
+bool raytrace(screenBuffer *screen){
 	// does the fov calculations
 	// https://en.wikipedia.org/wiki/Ray_tracing_(graphics)#Calculate_rays_for_rectangular_viewport
-	const double fov = PI/2;// human fov
+	const double dist = 10.0; // edit to change ray angle
 
-	vector *angle = malloc(sizeof(vector));
-	vectorCrossProduct(angle,*camera.vec[1],*camera.vec[2]);
-	vectorNormal(angle);
-	//camera->vec[0] Camera possition
-	// the other vects are for normalazation
+	vector right,yTemp,xTemp,zTemp,temp,first,ray;
+	vectorCopy(&right,cam.up);
+	vectorRotate(&right,cam.dir,cam.pos,PI/2); // gets
+	
+	
+	vectorScaler(&yTemp,cam.up,(screen->y)/2);
+	vectorScaler(&xTemp,right,(screen->x)/2);
+	vectorScaler(&zTemp,cam.dir,dist);
 
+	vectorSub(&temp,zTemp,xTemp);
+	vectorSub(&first,temp,yTemp);
+
+	vector xVector,yVector;
+	vectorScaler(&xVector,right,(screen->x)/((screen->x/2)-1));
+	vectorScaler(&yVector,cam.up,(screen->y)/((screen->y/2)-1));
+	
 	for(unsigned int y=0;y<screen->y;y+=1){
+		vectorScaler(&yTemp,yVector,y);
 		for(unsigned int x=0;x<screen->x;x+=1){
-
+			vectorScaler(&xTemp,xVector,x);
+			vectorAdd(&temp,first,xTemp);
+			vectorAdd(&ray,temp,yTemp);
+			// zero the screen buffer	
 			screenZeroPixel(&(screen->buffer[y][x]));
-			raytrace(&(screen->buffer[y][x]),*camera.vec[0],*angle);
+			// trace the rays
+			raytraceFrame(&(screen->buffer[y][x]),cam.pos,ray);
 		}
 	}
-	free(angle);
 	return true;
 }
 

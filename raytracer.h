@@ -11,7 +11,16 @@ typedef struct vector_S {
 	double Z;
 } vector;
 
-// does the raytraser stuff
+typedef struct {
+	vector pos;
+	vector dir;
+} camera;
+
+//
+bool raytracerInit();
+
+
+//// does the raytraser stuff
 bool raytrace(screenBuffer *screen);
 
 

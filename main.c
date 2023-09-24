@@ -15,6 +15,7 @@ int main(int argc,char **argv){
 	if(controlsInit()==false){fprintf(stderr,"ERROR: controls start failled");exit(1);}
 
 	bool stopMainLoop = false;  //shutdown var, i don't know how we need to shutdown the program so we need a few checks from multable sections	
+	if(raytracerInit()==false){fprintf(stderr,"ERROR: raytracer init falled");exit(1);}
 
 	playerInput input;
 	while(!stopMainLoop){
@@ -28,7 +29,6 @@ int main(int argc,char **argv){
 			continue;
 		}
 
-		
 
 		stopMainLoop = renderCheckStop(); // does the render want to stop
 		

@@ -25,6 +25,10 @@ typedef struct object_s {
 
 
 // vector math
+void vectorSet(vector *vec,double X,double Y,double Z);
+
+void vectorCopy(vector *vec0,vector vec1);
+
 void vectorCrossProduct(vector *vecOut,vector vec0,vector vec1);
 
 void vectorScaler(vector *vecOut,vector vec0,double scaler);
@@ -34,6 +38,8 @@ void vectorAdd(vector *vecOut,vector vec0,vector vec1);
 void vectorSub(vector *vecOut,vector vec0,vector vec1);
 
 void vectorNormal(vector *vec);
+
+void vectorRotate(vector *vec,vector line,vector point,double theta);
 
 double vectorDotProduct(vector vec0,vector vec1);
 
