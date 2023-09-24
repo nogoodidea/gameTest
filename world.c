@@ -13,6 +13,8 @@ objectArray *worldInit(){
 	world->count = 1;
 	world->obj = malloc(sizeof(object*)*1);
 	world->obj[0] = initObject(1);
+	vector vec0={1.0,0.5,0.0},vec1={1.0,-0.5,0.0},vec2={1.0,0.5,0.5};
+	subObjectSet((world->obj[0]->obj[0]),vec0,vec1,vec2);
 	return world;
 }
 

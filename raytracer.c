@@ -1,4 +1,5 @@
 #include<stdbool.h>
+#include<stdio.h>
 #include<stdlib.h>
 
 #include "screen.h"
@@ -35,11 +36,15 @@ double checkIntersect(vector rayOrigin,vector rayVector,subObject tri){
 	vectorSub(&edge0,tri.vec[1],tri.vec[0]);
 	vectorSub(&edge1,tri.vec[2],tri.vec[0]);
 
+	vectorPrint(rayOrigin,NULL);
+	vectorPrint(rayVector,NULL);
+	printf("\n");
+
 	vectorCrossProduct(&h,rayOrigin,edge1);
 	a = vectorDotProduct(edge0,h);
 	// gets the normal vector from the plane
 	// i think
-	
+		
 	if(a>-CUTOFF && a < CUTOFF){
 		return -1;
 	}
@@ -74,6 +79,7 @@ void raytraceRay(pixelColor *pixel,vector camera,vector angle,objectArray world)
 	for(unsigned int o=0;o<world.count;o+=1){
 		for(unsigned int i=0;i<world.obj[o]->count;i+=1){
 			temp = checkIntersect(camera,angle,*(world.obj[o]->obj[i]));
+			printf("|i: %i,t: %f",i,temp);
 			if(temp > t){
 				t=temp;
 				colors = &((world.obj[o]->obj[i])->colors);
@@ -86,6 +92,7 @@ void raytraceRay(pixelColor *pixel,vector camera,vector angle,objectArray world)
 		pixel->green= colors->G;
 		pixel->blue = colors->B;
 	}
+	printf("\n");
 }
 
 // does the raytraceing

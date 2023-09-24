@@ -1,6 +1,7 @@
 #include<stdlib.h>
 #include<math.h>
 #include<stdbool.h>
+#include<stdio.h>
 
 typedef struct vector_s {
 	double X;
@@ -128,6 +129,20 @@ void objectScaler(object obj,double scaler){
 	}
 }
 
+
+
+// subobject functions
+void subObjectCopy(subObject *subObjOut,subObject subObj){
+	for(unsigned int i=0;i<2;i+=1){
+		vectorCopy(&(subObjOut->vec[i]),subObj.vec[i]);
+	}
+}
+void subObjectSet(subObject *subObjOut,vector vec0,vector vec1,vector vec2){
+	vectorCopy(&(subObjOut->vec[0]),vec0);
+	vectorCopy(&(subObjOut->vec[1]),vec1);
+	vectorCopy(&(subObjOut->vec[2]),vec2);
+};
+
 //object int/add/free
 subObject *initSubObject(){
 	subObject *subObj = malloc(sizeof(subObject));
@@ -138,6 +153,9 @@ subObject *initSubObject(){
 		vectorCopy(&subObj->vec[i],zero);
 		//TODO error check for malloc calls
 	}
+	subObj->colors.R=0;
+	subObj->colors.G=0;
+	subObj->colors.B=0;
 	return subObj;
 }
 
@@ -171,3 +189,20 @@ void freeObject(object **obj){
 	free(*obj);
 	*obj = NULL;
 }
+// logging functions
+//
+
+void vectorPrint(vector vec,char *name){
+	if(name ==NULL){
+		printf("<%f,%f,%f>",vec.X,vec.Y,vec.Z);
+	}else{
+		printf("%s: <%f,%f,%f>",name,vec.X,vec.Y,vec.Z);
+	}
+};
+
+void subObjectPrint(subObject subObj,char *name){
+	printf("<");vectorPrint(subObj.vec[0],name);
+	printf(",");vectorPrint(subObj.vec[0],name);
+	printf(",");vectorPrint(subObj.vec[0],name);
+	printf(">");
+};

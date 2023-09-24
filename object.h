@@ -53,6 +53,9 @@ void objectRotate(object obj,vector line,vector point,double theta);
 
 void objectScaler(object obj,double scaler);
 
+void subObjectCopy(subObject *subObjOut,subObject subObj);
+
+void subObjectSet(subObject *subObjOut,vector vec0,vector vec1,vector vec2);
 //object int/add/free
 subObject *initSubObject();
 
@@ -63,5 +66,10 @@ void addSubObject(object *obj,subObject *objAdd);
 void freeSubObject(subObject **obj);
 
 void freeObject(object **obj);
+
+// logging
+void vectorPrint(vector vec,char *name);
+
+void subObjectPrint(subObject subObj,char *name);
 
 #endif //OBJECT_H
