@@ -36,10 +36,6 @@ double checkIntersect(vector rayOrigin,vector rayVector,subObject tri){
 	vectorSub(&edge0,tri.vec[1],tri.vec[0]);
 	vectorSub(&edge1,tri.vec[2],tri.vec[0]);
 
-	vectorPrint(rayOrigin,NULL);
-	vectorPrint(rayVector,NULL);
-	printf("\n");
-
 	vectorCrossProduct(&h,rayOrigin,edge1);
 	a = vectorDotProduct(edge0,h);
 	// gets the normal vector from the plane
@@ -99,7 +95,7 @@ void raytraceRay(pixelColor *pixel,vector camera,vector angle,objectArray world)
 bool raytrace(screenBuffer *screen,objectArray world){
 	// does the fov calculations
 	// https://en.wikipedia.org/wiki/Ray_tracing_(graphics)#Calculate_rays_for_rectangular_viewport
-	const double dist = 10.0; // edit to change ray angle
+	const double dist = screen->y; // edit to change ray angle
 
 	vector right,yTemp,xTemp,zTemp,temp,first,ray;
 	vectorCopy(&right,cam.up);
@@ -126,6 +122,7 @@ bool raytrace(screenBuffer *screen,objectArray world){
 			// zero the screen buffer	
 			screenZeroPixel(&(screen->buffer[y][x]));
 			// trace the rays
+			vectorPrint(xVector,"\nxVector");vectorPrint(yVector,"\nyVector");vectorPrint(ray,"\nrayDir");
 			raytraceRay(&(screen->buffer[y][x]),cam.pos,ray,world);
 		}
 	}
