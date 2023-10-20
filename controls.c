@@ -32,5 +32,13 @@ void controlsHandleInput(playerInput *input){
 		if(event.type == SDL_QUIT){
 			input->type = QUIT;
 		}
+		if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP){
+			// exit the program on ESC
+			switch(event.key.keysym.sym){
+				case SDL_SCANCODE_ESCAPE:
+					input->type = QUIT;
+					break;
+			}
+		}
 	}
 }
