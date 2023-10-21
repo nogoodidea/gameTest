@@ -9,6 +9,10 @@
 #define CUTOFF .0000001 
 #define PI 3.1415926
 
+#define MOVE_AMT 10
+#define ROT_AMT 10
+
+
 typedef struct {
 	vector pos;
 	vector dir;
@@ -16,6 +20,23 @@ typedef struct {
 } camera;
 
 camera cam;
+
+// camera functions 
+void cameraMove(vector dir){
+
+	vectorScaler(&dir,dir,MOVE_AMT);
+	vectorMult(&dir,dir,cam.pos);
+	vectorAdd(&cam.pos,cam.pos,dir);
+}
+
+void cameraAngle(vector dir){
+	vectorScaler(&dir,dir,MOVE_AMT);
+	vectorMult(&cam.pos,cam.pos,dir);
+	vectorNormal(&cam.pos);
+	vectorMult(&cam.up,cam.up,dir);
+	vectorNormal(&cam.up);
+}
+
 
 bool raytracerInit(){
 	// inital camera position and vecters

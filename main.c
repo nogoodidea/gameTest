@@ -28,11 +28,19 @@ int main(int argc,char **argv){
 		
 		// handle the userinput
 		controlsHandleInput(&input);
-		if(input.type == QUIT){
-			stopMainLoop = true;
-			continue;
+		switch(input.type){
+			case QUIT: // exit main loop
+				stopMainLoop = true;
+				continue;
+			case MOVE: // move
+				cameraMove(input.moves);	
+				break;
+			case ANGLE:
+				cameraAngle(input.moves);
+				break;
+			default:
+				break;
 		}
-
 
 		stopMainLoop = renderCheckStop(); // does the render want to stop
 		

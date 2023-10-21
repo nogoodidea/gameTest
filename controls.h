@@ -7,7 +7,7 @@
 
 
 // input types
-enum inputType {QUIT,MOVE,NONE};
+enum inputType {QUIT,MOVE,ANGLE,NONE};
 
 
 // union that holds the user input/SDL events for shutdown 

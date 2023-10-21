@@ -9,7 +9,11 @@
 #include "object.h"
 
 // input types
-enum inputType {QUIT,MOVE,NONE};
+enum inputType {QUIT,ANGLE,MOVE,NONE};
+//QUIT, exits game
+//ANGLE, changes the carmera angle (turn camera)
+//MOVE, moves
+//NONE, none
 
 
 // union that holds the user input/SDL events for shutdown 
@@ -32,11 +36,26 @@ void controlsHandleInput(playerInput *input){
 		if(event.type == SDL_QUIT){
 			input->type = QUIT;
 		}
-		if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP){
+		if(event.type == SDL_KEYDOWN){
 			// exit the program on ESC
 			switch(event.key.keysym.sym){
-				case SDL_SCANCODE_ESCAPE:
+				case SDLK_ESCAPE:
 					input->type = QUIT;
+				case SDLK_w:
+					input->type = MOVE;
+					input->moves.X = 1;
+					break;
+				case SDLK_s:
+					input->type = MOVE;
+					input->moves.X = -1;
+					break;
+				case SDLK_d:
+					input->type = MOVE;
+					input->moves.Y = 1;
+					break;
+				case SDLK_a:
+					input->type = MOVE;
+					input->moves.Y = -1;
 					break;
 			}
 		}
