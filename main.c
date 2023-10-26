@@ -31,18 +31,18 @@ int main(int argc,char **argv){
 		switch(input.type){
 			case QUIT: // exit main loop
 				stopMainLoop = true;
-				continue;
+				break;
 			case MOVE: // move
 				cameraMove(input.moves);	
 				break;
 			case ANGLE:
 				cameraAngle(input.moves);
 				break;
-			default:
+			case NONE:
 				break;
 		}
 
-		stopMainLoop = renderCheckStop(); // does the render want to stop
+		if(!stopMainLoop){stopMainLoop = renderCheckStop();} // does the render want to stop
 		
 	}
 	// cleanup functions

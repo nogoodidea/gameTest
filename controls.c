@@ -32,6 +32,7 @@ bool controlsInit(){
 void controlsHandleInput(playerInput *input){
 	static SDL_Event event;
 	input->type = NONE;
+	vectorSet(&(input->moves),0.0,0.0,0.0); // zero out the vector :) 
 	while(SDL_PollEvent(&event)){
 		if(event.type == SDL_QUIT){
 			input->type = QUIT;
@@ -41,21 +42,22 @@ void controlsHandleInput(playerInput *input){
 			switch(event.key.keysym.sym){
 				case SDLK_ESCAPE:
 					input->type = QUIT;
+					break;
 				case SDLK_w:
 					input->type = MOVE;
-					input->moves.X = 1;
+					input->moves.X = 1.0;
 					break;
 				case SDLK_s:
 					input->type = MOVE;
-					input->moves.X = -1;
-					break;
-				case SDLK_d:
-					input->type = MOVE;
-					input->moves.Y = 1;
+					input->moves.X = -1.0;
 					break;
 				case SDLK_a:
 					input->type = MOVE;
-					input->moves.Y = -1;
+					input->moves.Y = 1.0;
+					break;
+				case SDLK_d:
+					input->type = MOVE;
+					input->moves.Y = -1.0;
 					break;
 			}
 		}

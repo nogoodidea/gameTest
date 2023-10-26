@@ -17,6 +17,7 @@ bool raytracerInit();
 void cameraMove(vector dir);
 
 void cameraAngle(vector dir);
+
 //// does the raytraser stuff
 bool raytrace(screenBuffer *screen,objectArray world);
 

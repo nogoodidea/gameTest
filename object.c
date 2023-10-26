@@ -98,9 +98,9 @@ void vectorRotate(vector *vec,vector line,vector point,double theta){
 	double cosT = cos(theta), sinT = sin(theta);
 	double T = 1.0-cosT;
 
-	vec->X = (cosT+pow(line.X,2)*T)*oldX+(line.X*line.Y*T-line.Z*sinT)*oldY +(line.X*line.Z*T+line.Y*sinT)*oldZ + point.X;
-	vec->Y = (line.X*line.Y*T+line.Z*sinT)*oldX+(cosT+pow(line.Y,2)*T)*oldY+(line.Y*line.Z*T-line.X*sinT)*oldZ + point.Y;
-	vec->Z = (line.Z*line.X-line.Y*sinT)*oldX+(line.Z*line.Y*T+line.X*sinT)*oldY+(cosT+pow(line.Z,2)*T)*oldZ + point.Z;
+	vec->X = (cosT+pow(line.X,2)*T)*oldX		+(line.X*line.Y*T-line.Z*sinT)*oldY	+(line.X*line.Z*T+line.Y*sinT)*oldZ	+point.X;
+	vec->Y = (line.X*line.Y*T+line.Z*sinT)*oldX	+(cosT+pow(line.Y,2)*T)*oldY		+(line.Y*line.Z*T-line.X*sinT)*oldZ	+point.Y;
+	vec->Z = (line.Z*line.X-line.Y*sinT)*oldX	+(line.Z*line.Y*T+line.X*sinT)*oldY	+(cosT+pow(line.Z,2)*T)*oldZ		+point.Z;
 }
 
 double vectorDotProduct(vector vec0,vector vec1){

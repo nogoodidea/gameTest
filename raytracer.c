@@ -9,8 +9,8 @@
 #define CUTOFF .0000001 
 #define PI 3.1415926
 
-#define MOVE_AMT 10
-#define ROT_AMT 10
+#define MOVE_AMT 10.0
+#define ROT_AMT PI/20
 
 
 typedef struct {
@@ -20,21 +20,21 @@ typedef struct {
 } camera;
 
 camera cam;
+vector Zero;
 
 // camera functions 
 void cameraMove(vector dir){
-
 	vectorScaler(&dir,dir,MOVE_AMT);
-	vectorMult(&dir,dir,cam.pos);
+	vectorMult(&dir,dir,cam.dir);
+	//TODO object colision
 	vectorAdd(&cam.pos,cam.pos,dir);
 }
 
 void cameraAngle(vector dir){
-	vectorScaler(&dir,dir,MOVE_AMT);
-	vectorMult(&cam.pos,cam.pos,dir);
-	vectorNormal(&cam.pos);
-	vectorMult(&cam.up,cam.up,dir);
+	vectorRotate(&cam.up,dir,Zero,ROT_AMT);
+	vectorRotate(&cam.dir,dir,Zero,ROT_AMT);
 	vectorNormal(&cam.up);
+	vectorNormal(&cam.dir);
 }
 
 
@@ -43,6 +43,7 @@ bool raytracerInit(){
 	vectorSet(&cam.pos,0.0,0.0,0.0);
 	vectorSet(&cam.dir,1.0,0.0,0.0);
 	vectorSet(&cam.up,0.0,1.0,0.0);
+	vectorSet(&Zero,0.0,0.0,0.0); 
 	return true;
 }
 
